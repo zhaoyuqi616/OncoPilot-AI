@@ -11,8 +11,8 @@
 OncoPilot-AI transforms unstructured biomedical literature into an
 **interactive, explainable, and clinically meaningful AI system**.
 
-Designed for: - 🧪 Academic researchers\
-- 👨‍⚕️ Clinicians\
+Designed for: - 🧪 Academic researchers
+- 👨‍⚕️ Clinicians
 - 🤖 AI engineers
 
 ------------------------------------------------------------------------
@@ -21,16 +21,16 @@ Designed for: - 🧪 Academic researchers\
 
 ### Multi-Agent Architecture (LangGraph)
 
--   Retrieval Agent\
--   Evidence Scoring Agent\
--   Biomarker Extraction Agent\
--   Clinical Translation Agent\
+-   Retrieval Agent
+-   Evidence Scoring Agent
+-   Biomarker Extraction Agent
+-   Clinical Translation Agent
 -   Synthesis Agent
 
 ### Clinical-Grade Trust Layer
 
--   Confidence scoring\
--   Evidence ranking\
+-   Confidence scoring
+-   Evidence ranking
 -   Provenance tracking
 
 ### Structured Output
@@ -39,12 +39,12 @@ JSON-formatted outputs with biomarkers, therapies, and confidence.
 
 ### Observability
 
--   Agent tracing\
+-   Agent tracing
 -   Debug logging
 
 ### UI (Gradio)
 
--   Upload docs\
+-   Upload docs
 -   Ask questions
 
 ------------------------------------------------------------------------
@@ -74,19 +74,19 @@ python app/gradio_ui.py
 
 Input: EGFR resistance mechanisms in NSCLC
 
-Output: - Summary\
-- Biomarkers\
-- Therapies\
+Output: - Summary
+- Biomarkers
+- Therapies
 - Confidence score
 
 ------------------------------------------------------------------------
 
 ## 🧭 Learning Roadmap
 
-1.  Python + APIs\
-2.  RAG systems\
-3.  LLM integration\
-4.  Multi-agent systems\
+1.  Python + APIs
+2.  RAG systems
+3.  LLM integration
+4.  Multi-agent systems
 5.  Production AI
 
 ------------------------------------------------------------------------
