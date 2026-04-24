@@ -50,24 +50,25 @@ JSON-formatted outputs with biomarkers, therapies, and confidence.
 
 ------------------------------------------------------------------------
 ## 🏗️ Architecture
-
-User Query
+```text
+User Query 
    ↓
-LangGraph Orchestrator
+LangGraph Orchestrator 
    ↓
-[Retrieval Agent] → [Trust Layer]
+[Retrieval Agent] → [Trust Layer] 
    ↓
-[Biomarker Agent]
+[Biomarker Agent] 
    ↓
-[Clinical Agent]
+[Clinical Agent] 
    ↓
-[Synthesis Agent]
+[Synthesis Agent] 
    ↓
 Structured Output + Provenance
+```
 
 ------------------------------------------------------------------------
 ## 📦 Project Structure
-
+```text
 OncoPilot-AI/
 ├── app/
 │   └── gradio_ui.py          # User interface
@@ -89,7 +90,7 @@ OncoPilot-AI/
 ├── logs/
 ├── requirements.txt
 └── README.md
-
+```
 ------------------------------------------------------------------------
 ## ⚙️ Installation
 
