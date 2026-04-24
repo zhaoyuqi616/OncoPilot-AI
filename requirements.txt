@@ -1,0 +1,13 @@
+fastapi>=0.115.0
+uvicorn>=0.30.0
+pydantic>=2.7.0
+pydantic-settings>=2.3.0
+openai>=1.30.0
+langgraph>=0.2.60
+sentence-transformers>=3.0.0
+faiss-cpu>=1.8.0
+numpy<2
+pandas>=2.0.0
+gradio>=4.44.0
+python-dotenv>=1.0.1
+pytest>=8.2.0
