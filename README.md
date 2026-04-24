@@ -213,30 +213,36 @@ LLM generates structured answer
 
 ------------------------------------------------------------------------
 ## 💡 Design Philosophy
+```text
 “Not just answering questions — enabling evidence-based reasoning.”
-
+```
 Key principles:
-
+```text
 Interpretability > black-box
 Traceability > raw accuracy
 Modular > monolithic
 Clinical relevance > generic NLP
+```
 
 ------------------------------------------------------------------------
 
 ## 🏥 Real-World Use Cases
+```text
 MRD (ctDNA) interpretation
 Biomarker discovery
 Drug resistance analysis
 Literature summarization for tumor boards
+```
 
 ------------------------------------------------------------------------
 ## 🔥 Future Improvements
+```text
 🧬 BioBERT-based biomarker extraction
 📊 Clinical trial matching agent
 🧠 Memory-enabled longitudinal reasoning
 ☁️ Deployment (AWS / Docker)
 📈 UI visualization (evidence highlighting)
+```
 
 ------------------------------------------------------------------------
 ## 📜 License
