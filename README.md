@@ -8,8 +8,56 @@
 
 ## 🚀 Overview
 
-OncoPilot-AI transforms unstructured biomedical literature into an
-**interactive, explainable, and clinically meaningful AI system**.
+**OncoPilot-AI** is a production-oriented, multi-agent system designed to transform unstructured biomedical literature into an interactive, explainable, and clinically meaningful AI platform for translational oncology. The rapid expansion of biomedical publications—particularly in oncology—has created a significant bottleneck for researchers and clinicians, who must manually synthesize fragmented evidence across thousands of studies. Traditional keyword-based search systems and even standard Retrieval-Augmented Generation (RAG) pipelines often fail to provide **traceable, structured, and clinically actionable insights**, especially when queries require multi-step reasoning (e.g., linking biomarkers to mechanisms and therapeutic implications).
+
+OncoPilot-AI addresses this gap by introducing a **modular, multi-agent architecture** that decomposes complex biomedical questions into specialized analytical tasks. Instead of relying on a single monolithic model, the system orchestrates multiple domain-specific agents, each responsible for a distinct layer of reasoning. These include a **retrieval agent** for high-recall literature search, a **trust/evidence agent** for ranking and filtering evidence quality, a **biomarker extraction agent** for identifying genes, pathways, and molecular features, a **clinical translation agent** for mapping findings to therapeutic and diagnostic contexts, and a **synthesis agent** for generating coherent, evidence-grounded answers.
+
+### 🔬 Materials & Data Sources
+
+The system operates on large-scale biomedical corpora, including:
+
+* Peer-reviewed literature (e.g., PubMed abstracts and full-text articles)
+* Curated oncology datasets (e.g., TCGA, CPTAC)
+* Domain-specific knowledge bases (e.g., gene–disease associations, pathway databases)
+
+Documents are preprocessed through a standardized pipeline involving:
+
+* Text cleaning and normalization
+* Semantic chunking
+* Embedding generation using transformer-based models
+* Storage in a vector database (e.g., FAISS or Chroma)
+
+This enables efficient semantic retrieval and scalable indexing of tens of thousands of documents.
+
+### ⚙️ Methods & System Design
+
+At inference time, user queries are embedded and used to retrieve the most relevant document chunks. These are passed through a **LangGraph-based workflow**, where agents operate sequentially or conditionally:
+
+1. **Retrieval** – Identify top-k relevant passages
+2. **Evidence Scoring** – Rank passages by relevance, consistency, and potential clinical impact
+3. **Biomarker Extraction** – Detect key genes, pathways, or molecular entities
+4. **Clinical Interpretation** – Map findings to diagnostics, prognosis, or therapy
+5. **Answer Synthesis** – Generate structured, explainable responses with provenance
+
+Each step produces structured intermediate outputs (e.g., document IDs, similarity scores, extracted entities), enabling **full traceability and reproducibility**.
+
+### 🧠 Key Capabilities
+
+* **Explainability**: All outputs are grounded in source documents with traceable evidence
+* **Modularity**: Each agent can be independently improved or replaced
+* **Scalability**: Designed for large-scale document ingestion and real-time querying
+* **Clinical Relevance**: Focused on translating molecular insights into actionable knowledge
+
+### 🎯 Impact
+
+OncoPilot-AI bridges the gap between raw biomedical data and clinical decision-making by enabling users to:
+
+* Rapidly synthesize evidence across large corpora
+* Identify biomarkers and mechanisms of disease
+* Generate hypothesis-driven insights for translational research
+* Support clinical and therapeutic decision workflows
+
+By combining modern LLM capabilities with structured, agent-based reasoning, OncoPilot-AI represents a step toward **trustworthy, domain-aware AI systems in precision medicine**.
 
 Designed for: 
 - 🧪 Academic researchers
