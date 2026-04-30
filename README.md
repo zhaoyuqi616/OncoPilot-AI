@@ -159,14 +159,12 @@ OPENAI_API_KEY=your_key_here
 
 ## ▶️ Run
 
-1. Run API
-uvicorn api.main:app --reload
+1. Run Gradio UI
+python run_gradio.py
 
-Open:
-👉 http://127.0.0.1:8000/docs
+2. Open UI:
+👉 http://127.0.0.1:7860
 
-2. Run Gradio UI
-python app/gradio_ui.py
 
 ------------------------------------------------------------------------
 
