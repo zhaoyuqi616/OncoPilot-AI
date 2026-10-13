@@ -4,21 +4,30 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
+from oncopilot_ai.config import settings
+
 
 class HealthResponse(BaseModel):
     status: str
+    version: str = settings.app_version
     model: str
     embedding_model: str
     graph: str = "langgraph"
 
 
+class ReadinessResponse(BaseModel):
+    ready: bool
+    checks: dict[str, bool]
+    notes: list[str] = []
+
+
 class AskRequest(BaseModel):
-    question: str = Field(..., description="Biomedical/oncology question to answer")
-    top_k: int | None = Field(default=None, ge=1, le=20)
-    disease: str | None = Field(default=None, description="Optional disease filter, e.g. NSCLC")
-    gene: str | None = Field(default=None, description="Optional gene/biomarker filter, e.g. EGFR")
-    min_trust_score: float = Field(default=0.35, ge=0.0, le=1.0)
-    include_low_confidence: bool = Field(default=True)
+    question: str = Field(..., min_length=2, max_length=settings.max_question_chars, description="Biomedical/oncology question")
+    top_k: int | None = Field(default=None, ge=1, le=settings.max_top_k)
+    disease: str | None = Field(default=None, max_length=120)
+    gene: str | None = Field(default=None, max_length=80)
+    min_trust_score: float = Field(default=0.55, ge=0.0, le=1.0)
+    include_low_confidence: bool = Field(default=False)
 
 
 class SourceItem(BaseModel):
@@ -59,7 +68,7 @@ class ClinicalInterpretation(BaseModel):
     clinical_relevance: str
     patient_context_needed: list[str] = []
     actionability: Literal["hypothesis_generating", "translational_research", "clinical_trial_context", "clinical_decision_support_prototype"] = "hypothesis_generating"
-    safety_note: str = "This prototype is for research and educational use only, not for diagnosis or treatment decisions."
+    safety_note: str = "Human review is required."
 
 
 class StructuredAnswer(BaseModel):
@@ -82,21 +91,13 @@ class AskResponse(BaseModel):
     answer: str
     structured_answer: StructuredAnswer
     sources: list[SourceItem]
-    extracted_entities: ExtractedEntities
+    extracted_entities: ExtractedEntities | None = None
     evidence_summary: list[EvidenceAssessment]
     trust_score: float
     confidence: str
     trace_id: str
     warnings: list[str] = []
-
-
-class ChunkRecord(BaseModel):
-    chunk_id: str
-    doc_id: str
-    title: str
-    chunk_index: int
-    text: str
-    score: float | None = None
+    safety_flags: list[str] = []
 
 
 class TraceEvent(BaseModel):
@@ -108,7 +109,10 @@ class TraceEvent(BaseModel):
 
 class TraceResponse(BaseModel):
     trace_id: str
-    question: str
+    workspace_id: str | None = None
+    user_hash: str | None = None
+    question: str | None = None
+    question_hash: str | None = None
     task_type: str | None = None
     execution_plan: list[str] = []
     events: list[TraceEvent] = []

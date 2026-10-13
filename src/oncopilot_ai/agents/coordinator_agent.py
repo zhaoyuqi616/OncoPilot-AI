@@ -21,12 +21,8 @@ class CoordinatorAgent(BaseAgent):
 
             state["task_type"] = task_type
             state["execution_plan"] = [
-                "coordinator_agent",
-                "literature_agent",
-                "trust_agent",
-                "biomarker_agent",
-                "translation_agent",
-                "synthesis_agent",
+                "coordinator_agent", "literature_agent", "safety_agent", "trust_agent",
+                "biomarker_agent", "translation_agent", "synthesis_agent",
             ]
             append_event(state, self.name, "success", {"task_type": task_type, "execution_plan": state["execution_plan"]})
             return state
