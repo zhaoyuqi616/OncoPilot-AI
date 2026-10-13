@@ -61,20 +61,20 @@ def ask_oncopilot(question: str, top_k: int, disease: str, gene: str, min_trust_
 
 def rebuild_index():
     build_and_save_index()
-    return "Index rebuilt from data/sample_docs. Add your oncology TXT documents there and rerun this button."
+    return "Default workspace index rebuilt from data/workspaces/default/incoming (PDF, DOCX, TXT supported)."
 
 
 def build_ui() -> gr.Blocks:
     with gr.Blocks(title="OncoPilot-AI") as demo:
         gr.Markdown("# OncoPilot-AI — LangGraph Multi-Agent Oncology RAG Copilot")
         gr.Markdown(
-            "Research prototype for evidence-grounded oncology Q&A. Not for diagnosis or treatment decisions."
+            "Local development UI for evidence-grounded oncology Q&A. Production access should use the authenticated FastAPI service."
         )
         with gr.Row():
             question = gr.Textbox(
                 label="Clinical / translational oncology question",
-                value="What are common resistance mechanisms to EGFR inhibitors in NSCLC?",
-                lines=3,
+                value="In patients with advanced EGFR-mutant non-small cell lung cancer (NSCLC) harboring EGFR exon 19 deletions or L858R mutations who develop acquired resistance to first-line osimertinib, what are the major molecular resistance mechanisms? Distinguish EGFR-dependent mechanisms (e.g., C797S) from EGFR-independent mechanisms (e.g., MET amplification, HER2 alterations, and histologic transformation). Summarize the biological mechanisms, reported prevalence, potential therapeutic strategies, and supporting evidence from retrieved studies. Include citations and explicitly identify areas where evidence is limited.",
+                lines=5,
             )
         with gr.Row():
             top_k = gr.Slider(1, 10, value=4, step=1, label="Top-k retrieved chunks")

@@ -13,15 +13,15 @@ def _fallback_key_findings(chunks: list[dict]) -> list[str]:
     for chunk in chunks[:4]:
         sentence = chunk.get("key_sentence") or chunk.get("text", "")[:220]
         findings.append(f"{sentence} [source: {chunk.get('doc_id')}, trust={chunk.get('trust_score', 0):.2f}]")
-    return findings or ["No retrievable evidence was found in the current local knowledge base."]
+    return findings or ["No authorized, sufficiently reliable evidence was found in the current workspace corpus."]
 
 
 def _confidence_phrase(confidence: str) -> str:
     return {
-        "high": "Evidence appears relatively strong for a research prototype, but still requires expert review.",
+        "high": "Evidence is relatively strong within the authorized corpus, with expert review still required.",
         "moderate": "Evidence is directionally useful but should be checked against source documents and clinical context.",
-        "low": "Evidence is limited; use only for hypothesis generation or literature triage.",
-        "insufficient": "Evidence is insufficient in the indexed corpus.",
+        "low": "Evidence is limited; use only for literature triage or hypothesis generation.",
+        "insufficient": "Evidence is insufficient in the authorized indexed corpus.",
     }.get(confidence, "Evidence confidence is uncertain.")
 
 
@@ -36,9 +36,10 @@ class SynthesisAgent(BaseAgent):
             translation_notes = state.get("translation_notes", "")
             confidence = state.get("confidence", "insufficient")
             trust_score = float(state.get("trust_score", 0.0))
+            allow_external = bool(state.get("external_llm_allowed", False))
 
-            client = get_client()
-            if client is not None:
+            client = get_client() if allow_external else None
+            if client is not None and chunks:
                 prompt = build_synthesis_prompt(
                     state["question"],
                     chunks,
@@ -50,10 +51,11 @@ class SynthesisAgent(BaseAgent):
                 executive_summary = response.output_text.strip()
             else:
                 mechanisms = ", ".join(entities.mechanisms) if entities and entities.mechanisms else "limited clearly extracted mechanisms"
+                mode = "privacy-preserving fallback" if not allow_external else "local fallback"
                 executive_summary = (
-                    f"Based on the local indexed evidence, the answer centers on {mechanisms}. "
+                    f"Based on the authorized local evidence, the answer centers on {mechanisms}. "
                     f"Overall confidence is {confidence} with an aggregate trust score of {trust_score:.2f}. "
-                    "This was generated in fallback mode without an external LLM."
+                    f"This response used {mode} mode without transmitting source text to an external LLM."
                 )
 
             if entities is None:
@@ -77,13 +79,14 @@ class SynthesisAgent(BaseAgent):
                         "variant allele fraction / expression cutoff where relevant",
                     ],
                     actionability="clinical_decision_support_prototype" if confidence in {"high", "moderate"} else "hypothesis_generating",
+                    safety_note=state.get("safety_note", "Human review is required."),
                 ),
                 evidence=evidence_summary,
                 confidence=confidence,
                 recommended_next_steps=[
-                    "Review the highest-trust source chunks before using the output in a scientific or clinical discussion.",
-                    "Add PubMed IDs, trial phase, sample size, and guideline tags to metadata for stronger evidence grading.",
-                    "Validate answers against expert-curated examples before deploying to researchers or clinicians.",
+                    "Open and review the highest-trust authorized source passages before scientific or clinical use.",
+                    "Escalate patient-specific diagnosis/treatment decisions to qualified clinicians and institutional workflows.",
+                    "Add validated metadata such as PubMed ID, study design, sample size, trial phase, and guideline version where available.",
                 ],
                 citations=[
                     {
@@ -99,7 +102,6 @@ class SynthesisAgent(BaseAgent):
                     for chunk in chunks
                 ],
             )
-            # Pydantic will coerce citation dicts into SourceItem.
             state["structured_answer"] = structured
             state["final_answer"] = (
                 f"{structured.executive_summary}\n\n"
@@ -107,5 +109,10 @@ class SynthesisAgent(BaseAgent):
                 "Key findings:\n- " + "\n- ".join(structured.key_findings[:5]) + "\n\n"
                 f"Safety note: {structured.clinical_interpretation.safety_note}"
             )
-            append_event(state, self.name, "success", {"answer_preview": state["final_answer"][:200], "confidence": confidence})
+            append_event(
+                state,
+                self.name,
+                "success",
+                {"confidence": confidence, "external_llm_used": client is not None, "num_citations": len(structured.citations)},
+            )
             return state
